@@ -1,0 +1,43 @@
+# Unity generated/cache — fully rebuilt by the editor on open (Library/ is ~2 GB)
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]serSettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/[Bb]uild/
+/[Bb]uilds/
+
+# IDE solution/project files — regenerated from Assets by the editor
+*.csproj
+*.sln
+*.slnx
+*.user
+*.suo
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+.vs/
+.vscode/
+.idea/
+.consulo/
+ExportedObj/
+*.unityproj
+
+# Build artifacts / packages
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# OS noise
+.DS_Store
+
+# Never ignore .meta files — asset GUIDs live there and the prefab config
+# references all art by GUID. (No pattern here does, this is a reminder.)

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73cc99386f109496a94a412e0373d49d, type: 3}
+  m_Name: MarlEconomyPrefabConfig
+  m_EditorClassIdentifier: Assembly-CSharp::MarlEconomy.UnityViz.MarlEconomyPrefabConfig
+  householdPrefab: {fileID: 0}
+  firmPrefab: {fileID: 0}
+  governmentPrefab: {fileID: 919132149155446097, guid: 11ff60d887a4e431db8b890e3e937dbb, type: 3}
+  centralBankPrefab: {fileID: 919132149155446097, guid: 76729d526e8644b9191009f6d6edb3ae, type: 3}
+  marketPrefab: {fileID: 919132149155446097, guid: cc1a1d077cae94a35996f68561433600, type: 3}
+  clinicPrefab: {fileID: 919132149155446097, guid: a49b28ab87411487f85a73b70f4d134b, type: 3}
+  bankPrefab: {fileID: 919132149155446097, guid: 76729d526e8644b9191009f6d6edb3ae, type: 3}
+  restPrefab: {fileID: 919132149155446097, guid: b2844ffdf75974ca4992a07a20376a0e, type: 3}
+  riskZonePrefab: {fileID: 919132149155446097, guid: 3558ce411e4e54af99edfec7ed65f373, type: 3}
+  poorMaterial: {fileID: 0}
+  middleMaterial: {fileID: 0}
+  richMaterial: {fileID: 0}
+  eliteMaterial: {fileID: 0}
+  failedActionMaterial: {fileID: 0}
