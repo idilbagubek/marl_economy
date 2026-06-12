@@ -34,7 +34,7 @@ namespace MarlEconomy.UnityViz
         public Vector3 bankPrefabScale = new Vector3(1.0f, 1.0f, 1.0f);
         public Vector3 restPrefabScale = new Vector3(1.0f, 1.0f, 1.0f);
         public Vector3 riskZonePrefabScale = new Vector3(1.0f, 1.0f, 1.0f);
-        public Vector3 generatedInstitutionScale = new Vector3(2.5f, 2.5f, 2.5f);
+        public Vector3 generatedInstitutionScale = new Vector3(1.2f, 1.2f, 1.2f);
 
         [Header("Institution Positions")]
         public Vector3 governmentPosition = new Vector3(-19.0f, 0.0f, 22.0f);
@@ -549,9 +549,20 @@ namespace MarlEconomy.UnityViz
                 return;
             }
 
-            renderer.material.color = firm.spawned_this_step
-                ? new Color(0.33f, 0.72f, 0.45f)
-                : new Color(0.48f, 0.52f, 0.62f);
+            if (firm.spawned_this_step)
+            {
+                renderer.material.color = new Color(0.33f, 0.92f, 0.48f);
+                return;
+            }
+
+            // Health gradient: red (cash≈0) → amber (cash≈8) → blue-gray (cash≥20)
+            float t = Mathf.Clamp01(firm.cash / 20f);
+            Color low  = new Color(0.82f, 0.20f, 0.18f);
+            Color mid  = new Color(0.96f, 0.72f, 0.18f);
+            Color high = new Color(0.42f, 0.52f, 0.72f);
+            renderer.material.color = t < 0.5f
+                ? Color.Lerp(low, mid, t * 2f)
+                : Color.Lerp(mid, high, (t - 0.5f) * 2f);
         }
 
         private void SetColor(GameObject obj, Color color)
@@ -590,7 +601,15 @@ namespace MarlEconomy.UnityViz
             Vector3 position = household.position != null
                 ? ToUnityVector(household.position)
                 : FallbackHouseholdPosition(household.id);
-            position.y = Mathf.Max(position.y, 1.0f);
+
+            // Spread co-located households (multiple workers at same firm) using a
+            // consistent per-id golden-angle ring so they cluster around the destination
+            // instead of stacking exactly.
+            float angle = household.id * 2.399963f;
+            float ring  = 0.55f + (household.id % 4) * 0.30f;
+            position.x += Mathf.Cos(angle) * ring;
+            position.z += Mathf.Sin(angle) * ring;
+            position.y  = 1.1f;
             return position;
         }
 
@@ -599,7 +618,7 @@ namespace MarlEconomy.UnityViz
             Vector3 position = household.home_position != null
                 ? ToUnityVector(household.home_position)
                 : FallbackHouseholdPosition(household.id);
-            position.y = Mathf.Max(position.y, 1.0f);
+            position.y = 1.1f;
             return position;
         }
 
