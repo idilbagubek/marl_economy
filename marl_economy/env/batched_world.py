@@ -542,6 +542,8 @@ class BatchedWorld:
             raise RuntimeError("All worlds are done. Call reset().")
 
         self._reset_weekly_accumulators()
+        for k in range(self.K):
+            self.visual_events[k].clear()
         # C1: reset the per-step money ledger (all K; done worlds are skipped in
         # every phase so their deltas stay 0).
         self._minted[:] = 0.0

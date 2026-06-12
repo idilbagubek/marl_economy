@@ -18,7 +18,10 @@ namespace MarlEconomy.UnityViz
             lastWeek = snap.week;
 
             foreach (var evt in snap.events)
+            {
+                if (evt.week < snap.week - 1) continue;
                 HandleEvent(evt, snap.week);
+            }
 
             int stealCount = 0;
             foreach (var household in snap.households)
