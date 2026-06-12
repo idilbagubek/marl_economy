@@ -23,6 +23,10 @@ namespace MarlEconomy.UnityViz
                 return;
             }
 
+            int stealsThisWeek = 0;
+            foreach (var h in snapshot.households)
+                if (h.action_label == "steal") stealsThisWeek++;
+
             label.text =
                 $"Regime: {snapshot.regime}\n" +
                 $"Week: {snapshot.week}\n" +
@@ -30,7 +34,7 @@ namespace MarlEconomy.UnityViz
                 $"Gini: {macro.gini:0.000}\n" +
                 $"Inflation: {macro.inflation:0.000}\n" +
                 $"Unemployment: {macro.unemployment:0.000}\n" +
-                $"Crime: {macro.crime_rate:0.000}\n" +
+                $"Crime: {macro.crime_rate:0.000}  ({stealsThisWeek} this wk)\n" +
                 $"Avg Health: {macro.avg_health:0.000}\n" +
                 $"Mean Hunger: {macro.mean_hunger:0.000}\n" +
                 $"Hungry %: {macro.frac_hungry:0.0%}\n" +
