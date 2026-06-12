@@ -19,6 +19,17 @@ namespace MarlEconomy.UnityViz
 
             foreach (var evt in snap.events)
                 HandleEvent(evt, snap.week);
+
+            int stealCount = 0;
+            foreach (var household in snap.households)
+            {
+                if (household.action_label != "steal") continue;
+                stealCount++;
+                Vector3 pos = household.position != null
+                    ? new Vector3(household.position.x, household.position.y, household.position.z)
+                    : Vector3.zero;
+                fx?.PlayCrime(pos);
+            }
         }
 
         private void HandleEvent(UnityEventRecord evt, int week)

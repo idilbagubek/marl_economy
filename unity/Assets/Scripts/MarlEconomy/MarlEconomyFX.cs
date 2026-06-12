@@ -63,6 +63,22 @@ namespace MarlEconomy.UnityViz
             });
         }
 
+        public void PlayCrime(Vector3 position)
+        {
+            Emit(position, new FXConfig
+            {
+                label = "Crime",
+                count = 22,
+                lifetime = 1.8f,
+                speed = 3.5f,
+                size = 0.22f,
+                radius = 0.5f,
+                colorStart = new Color(0.90f, 0.12f, 0.12f),
+                colorEnd = new Color(0.30f, 0.04f, 0.04f),
+                velocityY = 1.5f
+            });
+        }
+
         public void PlayHouseholdDeath(Vector3 position)
         {
             Emit(position, new FXConfig
@@ -98,6 +114,7 @@ namespace MarlEconomy.UnityViz
             go.transform.position = position;
 
             var ps = go.AddComponent<ParticleSystem>();
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
             var main = ps.main;
             main.duration = 0.4f;

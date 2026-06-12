@@ -1,0 +1,11 @@
+{
+  "mode": "checkpoint_evaluation",
+  "checkpoint_path": "C:\\Users\\Baris Kaan\\Desktop\\marl_economy\\runs\\LME_stage4_v3\\final",
+  "regime": "LME",
+  "stage": 4,
+  "seed": 42,
+  "episode_weeks": 156,
+  "explore": false,
+  "export_snapshots": true,
+  "plots": true
+}

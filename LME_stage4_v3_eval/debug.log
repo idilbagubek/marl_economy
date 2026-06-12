@@ -1,0 +1,8 @@
+FIRM_EXIT: id=5, cash=-2.5738, displaced=9
+FIRM_EXIT: id=0, cash=-3.1631, displaced=25
+FIRM_EXIT: id=3, cash=-2.3052, displaced=26
+EMERGENCY_ENTRY: id=6 after mass exit
+FIRM_EXIT: id=1, cash=-1.0959, displaced=11
+EMERGENCY_ENTRY: id=7 after mass exit
+FIRM_EXIT: id=7, cash=-0.5082, displaced=15
+EMERGENCY_ENTRY: id=8 after mass exit
