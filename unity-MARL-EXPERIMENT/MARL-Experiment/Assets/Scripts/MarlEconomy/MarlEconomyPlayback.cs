@@ -210,7 +210,10 @@ namespace MarlEconomy.UnityViz
             foreach (var id in firms.Keys) if (!alive.Contains(id)) stale.Add(id);
             foreach (var id in stale)
             {
-                Destroy(firms[id]);
+                // A closed firm doesn't just disappear — it visibly collapses
+                // (sinks + shrinks under a BANKRUPT sign) before destroying itself.
+                if (firmVisuals.TryGetValue(id, out var fv) && fv != null) fv.Collapse();
+                else if (firms.TryGetValue(id, out var go) && go != null) Destroy(go);
                 firms.Remove(id);
                 firmVisuals.Remove(id);
             }
@@ -249,17 +252,26 @@ namespace MarlEconomy.UnityViz
             }
         }
 
-        // Where this household should stand this week. Firm-routed actions
-        // (work/shop) walk to the firm's LOT, not the stale data position; each
-        // agent gets a deterministic spot by the building entrance so crowds
-        // spread out instead of stacking. Everything else (home, clinic, bank,
-        // rest, risk zone) uses the data position — those anchors still match.
+        // Where this household should stand this week — driven by the ACTION, so
+        // the visual always matches what the agent chose in the data ("truth
+        // alignment"): work/shop walk to the target firm's lot entrance; rest, the
+        // clinic, investing and stealing each gather at their labelled building.
+        // Each agent gets a deterministic offset so crowds fan out, never stack.
         private Vector3 ResolveHouseholdPos(HouseholdSnapshot h)
         {
             if (h == null) return Vector3.zero;
-            if ((h.action_label == "work" || h.action_label == "shop")
-                && lotByFirm.TryGetValue(h.target_firm_id, out int lot))
-                return MarlCityLots.LotPosition(lot) + DoorOffset(h.id, lot);
+            switch (h.action_label)
+            {
+                case "work":
+                case "shop":
+                    if (lotByFirm.TryGetValue(h.target_firm_id, out int lot))
+                        return MarlCityLots.LotPosition(lot) + DoorOffset(h.id, lot);
+                    break; // unknown firm → fall through to the data position
+                case "rest":   return RestPos     + ActionSpread(h.id, 5.5f, 9.5f); // ring the apartment
+                case "steal":  return RiskZonePos + ActionSpread(h.id, 3.0f, 6.0f);
+                case "clinic": return ClinicPos   + ActionSpread(h.id, 3.0f, 5.5f);
+                case "invest": return BankPos     + ActionSpread(h.id, 3.0f, 5.5f);
+            }
             return ToWorld(h.position, FallbackHomePos(h.id));
         }
 
@@ -270,6 +282,17 @@ namespace MarlEconomy.UnityViz
             float u = Mathf.Repeat(householdId * 0.6180339f, 1f);
             float v = Mathf.Repeat(householdId * 0.7548777f, 1f);
             return front * (3.6f + u * 1.6f) + side * (v * 5.2f - 2.6f);
+        }
+
+        // Deterministic golden-angle scatter in an annulus [rMin, rMax] so everyone
+        // gathered at one landmark fans out into a readable RING around the building
+        // (rMin keeps them outside its footprint instead of clipping through it).
+        private static Vector3 ActionSpread(int id, float rMin, float rMax)
+        {
+            float ang = id * 2.39996323f;                                  // golden angle
+            float u = Mathf.Repeat(id * 0.6180339f, 1f);
+            float r = Mathf.Sqrt(Mathf.Lerp(rMin * rMin, rMax * rMax, u));  // uniform over the annulus
+            return new Vector3(Mathf.Cos(ang) * r, 0f, Mathf.Sin(ang) * r);
         }
 
         private MarlFirmVisual EnsureFirm(int id)
@@ -331,6 +354,8 @@ namespace MarlEconomy.UnityViz
             var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.transform.localScale = new Vector3(1.4f, 2.0f, 1.4f);
             cube.transform.localPosition = new Vector3(0f, 1.0f, 0f);
+            // Primitives come up on the Built-in Standard material (magenta in URP).
+            MarlVisualPalette.SetColor(cube.GetComponent<Renderer>(), new Color(0.62f, 0.64f, 0.72f));
             return cube;
         }
 
@@ -338,6 +363,7 @@ namespace MarlEconomy.UnityViz
         {
             var cap = GameObject.CreatePrimitive(PrimitiveType.Capsule);
             cap.transform.localScale = new Vector3(0.6f, 0.9f, 0.6f);
+            MarlVisualPalette.SetColor(cap.GetComponent<Renderer>(), new Color(0.85f, 0.86f, 0.92f));
             return cap;
         }
 

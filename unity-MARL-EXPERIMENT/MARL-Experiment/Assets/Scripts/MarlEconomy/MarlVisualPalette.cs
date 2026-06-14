@@ -43,6 +43,37 @@ namespace MarlEconomy.UnityViz
             }
         }
 
+        // Action colour language — shared by the per-agent action tag and the
+        // destination buildings, so "this agent is working" and "this is the work
+        // building" read in the same colour.
+        public static Color Action(string action)
+        {
+            switch (action)
+            {
+                case "work":   return new Color(0.30f, 0.62f, 1.00f); // blue
+                case "shop":   return new Color(0.30f, 0.85f, 0.55f); // green
+                case "rest":   return new Color(0.45f, 0.85f, 0.95f); // cyan
+                case "steal":  return new Color(0.92f, 0.18f, 0.18f); // red
+                case "clinic": return new Color(0.95f, 0.45f, 0.55f);
+                case "invest": return new Color(0.96f, 0.80f, 0.25f);
+                default:       return new Color(0.85f, 0.85f, 0.88f);
+            }
+        }
+
+        public static string ActionLabel(string action)
+        {
+            switch (action)
+            {
+                case "work":   return "WORK";
+                case "shop":   return "SHOP";
+                case "rest":   return "REST";
+                case "steal":  return "STEAL";
+                case "clinic": return "CLINIC";
+                case "invest": return "INVEST";
+                default:       return string.IsNullOrEmpty(action) ? "" : action.ToUpperInvariant();
+            }
+        }
+
         public static void Disaster(DisasterKind kind, out Color a, out Color b)
         {
             switch (kind)
@@ -83,12 +114,26 @@ namespace MarlEconomy.UnityViz
             return m;
         }
 
-        // Sets a renderer's tint in a way that works for both URP Lit (_BaseColor)
-        // and legacy (_Color) materials, using an instance so we don't touch the asset.
+        // Tints a renderer, but FIRST guarantees a URP-compatible material.
+        // GameObject.CreatePrimitive hands back Unity's Built-in "Default-Material"
+        // (Standard shader), which renders flat MAGENTA under URP — tinting it does
+        // nothing. So if the renderer isn't already on a URP shader we swap in a
+        // fresh URP/Lit instance, then colour it. (Instance, never the asset.)
         public static void SetColor(Renderer r, Color color)
         {
             if (r == null) return;
             var m = r.material; // instance
+            if (m == null || m.shader == null ||
+                !m.shader.name.StartsWith("Universal Render Pipeline"))
+            {
+                Shader lit = Shader.Find("Universal Render Pipeline/Lit");
+                if (lit == null) lit = Shader.Find("Universal Render Pipeline/Unlit");
+                if (lit != null)
+                {
+                    m = new Material(lit);
+                    r.material = m;
+                }
+            }
             if (m.HasProperty("_BaseColor")) m.SetColor("_BaseColor", color);
             if (m.HasProperty("_Color")) m.SetColor("_Color", color);
             m.color = color;

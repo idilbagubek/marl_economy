@@ -13,6 +13,7 @@ namespace MarlEconomy.UnityViz
 
         private Renderer _orb;
         private Material _orbMat;
+        private TextMesh _actionTag;
 
         private Vector3 _lastPos;
         private float _baseScale = 1f;
@@ -46,6 +47,18 @@ namespace MarlEconomy.UnityViz
             _orb = orb.GetComponent<Renderer>();
             _orbMat = MarlVisualPalette.NewUnlit(Color.white);
             _orb.sharedMaterial = _orbMat;
+
+            // Floating action tag so each agent's chosen action is readable.
+            var tag = new GameObject("ActionTag");
+            tag.transform.SetParent(transform, false);
+            tag.transform.localPosition = new Vector3(0f, 2.62f, 0f);
+            _actionTag = tag.AddComponent<TextMesh>();
+            _actionTag.anchor = TextAnchor.MiddleCenter;
+            _actionTag.alignment = TextAlignment.Center;
+            _actionTag.characterSize = 0.1f;
+            _actionTag.fontSize = 48;
+            _actionTag.color = Color.white;
+            tag.AddComponent<MarlBillboard>();
 
             _lastPos = transform.position;
             _initialised = true;
@@ -91,6 +104,12 @@ namespace MarlEconomy.UnityViz
             if (_action == "steal") c = MarlVisualPalette.Steal;
             if (_isDead) c = new Color(0.35f, 0.35f, 0.38f);
             SetOrb(c);
+
+            if (_actionTag != null)
+            {
+                _actionTag.text  = _isDead ? "DEAD" : MarlVisualPalette.ActionLabel(_action);
+                _actionTag.color = _isDead ? new Color(0.55f, 0.55f, 0.58f) : MarlVisualPalette.Action(_action);
+            }
         }
 
         private void SetOrb(Color c)

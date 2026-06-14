@@ -3,17 +3,20 @@ using UnityEngine;
 
 namespace MarlEconomy.UnityViz
 {
-    // The Toon City packs model window panes coplanar with the walls and shipped
-    // them as TRANSPARENT glass; the Built-in→URP upgrade left them OPAQUE, so
-    // they z-fight the wall face behind them and read as broken/unrendered.
-    // Restyle() turns any window/glass material into real transparent glass
-    // (drawn after the opaque pass → no depth fighting). Used by the editor menu
-    // "MARL Economy/Style Window Materials (glass)" for a persistent fix and as
-    // a runtime safety net on every building the visualization instantiates.
+    // Window/glass submeshes on the toon buildings must read as solid, lit glass
+    // panes — never see-through holes, never flickering. Restyle() gives them a
+    // bright emissive glass-blue and draws them in the TRANSPARENT queue (after
+    // every opaque wall) with depth-write ON: being strictly later than the walls
+    // means a coplanar pane can never z-fight, while alpha 1 + ZWrite keep the
+    // pane looking solid. Used by the editor menu "MARL Economy/Style Window
+    // Materials (glass)" for a persistent fix and as a runtime safety net on every
+    // building the visualization instantiates.
     public static class MarlWindowGlass
     {
-        public static readonly Color GlassColor = new Color(0.55f, 0.78f, 0.95f, 0.85f);
-        public static readonly Color GlassGlow  = new Color(0.10f, 0.18f, 0.30f, 1f);
+        // Alpha 1 → a solid pane, not a hole. The transparent queue + ZWrite are
+        // only there to dodge coplanar z-fighting, not to make the glass see-through.
+        public static readonly Color GlassColor = new Color(0.52f, 0.78f, 0.98f, 1f);
+        public static readonly Color GlassGlow  = new Color(0.16f, 0.34f, 0.55f, 1f);
 
         private static readonly HashSet<Material> _done = new HashSet<Material>();
 
@@ -52,8 +55,10 @@ namespace MarlEconomy.UnityViz
                 if (lit != null) m.shader = lit;
             }
 
-            // Transparent surface (URP/Lit): alpha blend, no depth write, drawn
-            // in the transparent queue so coplanar panes never fight the wall.
+            // Alpha-blend surface, but drawn in the TRANSPARENT queue (after every
+            // opaque wall) with ZWrite ON and an opaque colour — so a coplanar pane
+            // can never z-fight, yet it still reads as a solid, lit glass pane and
+            // not a see-through hole.
             m.SetFloat("_Surface", 1f);
             m.SetFloat("_Blend", 0f); // alpha
             m.SetOverrideTag("RenderType", "Transparent");
@@ -61,17 +66,20 @@ namespace MarlEconomy.UnityViz
             if (m.HasProperty("_DstBlend")) m.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
             if (m.HasProperty("_SrcBlendAlpha")) m.SetFloat("_SrcBlendAlpha", (float)UnityEngine.Rendering.BlendMode.One);
             if (m.HasProperty("_DstBlendAlpha")) m.SetFloat("_DstBlendAlpha", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-            if (m.HasProperty("_ZWrite")) m.SetFloat("_ZWrite", 0f);
+            if (m.HasProperty("_ZWrite")) m.SetFloat("_ZWrite", 1f); // solid: write depth, occlude
             if (m.HasProperty("_AlphaClip")) m.SetFloat("_AlphaClip", 0f);
             m.DisableKeyword("_ALPHATEST_ON");
             m.DisableKeyword("_ALPHAPREMULTIPLY_ON");
             m.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
             m.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+            // ZWrite is on, so let the panes rejoin the depth + shadow passes.
+            m.SetShaderPassEnabled("DepthOnly", true);
+            m.SetShaderPassEnabled("ShadowCaster", true);
 
-            if (m.HasProperty("_Cull")) m.SetFloat("_Cull", 0f); // double-sided panes
+            if (m.HasProperty("_Cull")) m.SetFloat("_Cull", 0f); // double-sided → always visible
             if (m.HasProperty("_BaseColor")) m.SetColor("_BaseColor", GlassColor);
             if (m.HasProperty("_Color")) m.SetColor("_Color", GlassColor);
-            if (m.HasProperty("_Smoothness")) m.SetFloat("_Smoothness", 0.95f);
+            if (m.HasProperty("_Smoothness")) m.SetFloat("_Smoothness", 0.9f);
             if (m.HasProperty("_Metallic")) m.SetFloat("_Metallic", 0f);
             if (m.HasProperty("_EmissionColor"))
             {

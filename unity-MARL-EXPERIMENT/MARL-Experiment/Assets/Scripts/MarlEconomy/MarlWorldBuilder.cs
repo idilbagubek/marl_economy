@@ -35,10 +35,10 @@ namespace MarlEconomy.UnityViz
                 MarlEconomyPlayback.ClinicPos, new Color(0.95f, 0.35f, 0.35f), config, 6.5f);
             Landmark(root, config != null ? config.bankPrefab : null, "INVESTMENT BANK",
                 MarlEconomyPlayback.BankPos, new Color(0.95f, 0.85f, 0.35f), config, 6.5f);
-            Landmark(root, config != null ? config.restPrefab : null, "REST",
-                MarlEconomyPlayback.RestPos, new Color(0.45f, 0.75f, 1.0f), config, 6f);
-            Landmark(root, config != null ? config.riskZonePrefab : null, "RISK ZONE",
-                MarlEconomyPlayback.RiskZonePos, new Color(0.85f, 0.30f, 0.75f), config, 6f);
+            Landmark(root, PickRestApartment(config), "REST AREA",
+                MarlEconomyPlayback.RestPos, MarlVisualPalette.Action("rest"), config, 9f);
+            Landmark(root, config != null ? config.riskZonePrefab : null, "RISK ZONE (STEAL)",
+                MarlEconomyPlayback.RiskZonePos, MarlVisualPalette.Action("steal"), config, 6f);
 
             BuildHomes(root, config);
             BuildGreenery(root, config);
@@ -72,7 +72,7 @@ namespace MarlEconomy.UnityViz
             var labelHolder = new GameObject("Business District Label");
             labelHolder.transform.SetParent(root, false);
             labelHolder.transform.position = new Vector3(31f, 0f, 25f);
-            AddLabel(labelHolder, "BUSINESS DISTRICT", new Color(0.30f, 0.45f, 0.75f), 6.5f);
+            AddLabel(labelHolder, "BUSINESS DISTRICT  ·  WORK & SHOP", new Color(0.30f, 0.45f, 0.75f), 6.5f);
         }
 
         private static void BuildGround(Transform root)
@@ -126,6 +126,29 @@ namespace MarlEconomy.UnityViz
             AddLabel(obj, label, color, labelY);
         }
 
+        // Households rest at a single landmark, so it should read as a prominent
+        // APARTMENT, not a little house/school. Pick the tallest apartment among the
+        // configured home prefabs (cb-apartment-*). Chosen in code on purpose: the
+        // restPrefab field in the .asset doesn't reliably stick when edited outside
+        // Unity, whereas homePrefabs already references the apartments we want.
+        private static GameObject PickRestApartment(MarlEconomyPrefabConfig config)
+        {
+            if (config == null || config.homePrefabs == null || config.homePrefabs.Count == 0)
+                return config != null ? config.restPrefab : null;
+
+            GameObject best = null;
+            float bestScore = float.NegativeInfinity;
+            foreach (var p in config.homePrefabs)
+            {
+                if (p == null) continue;
+                bool isApartment = p.name.ToLowerInvariant().Contains("apartment");
+                // Apartments win outright; ties (and the no-apartment case) break by height.
+                float score = (isApartment ? 1000f : 0f) + MarlCityLots.MeasureHeight(p);
+                if (score > bestScore) { bestScore = score; best = p; }
+            }
+            return best != null ? best : config.restPrefab;
+        }
+
         private static GameObject Fallback(Color color)
         {
             var root = new GameObject("Landmark");
@@ -146,9 +169,9 @@ namespace MarlEconomy.UnityViz
             tm.text = text;
             tm.anchor = TextAnchor.MiddleCenter;
             tm.alignment = TextAlignment.Center;
-            tm.characterSize = 0.22f;
+            tm.characterSize = 0.25f;
             tm.fontSize = 48;
-            tm.color = Color.Lerp(color, Color.black, 0.55f);
+            tm.color = Color.Lerp(color, Color.black, 0.35f);
             go.AddComponent<MarlBillboard>();
         }
 

@@ -3,14 +3,15 @@ using UnityEngine;
 
 namespace MarlEconomy.UnityViz.EditorTools
 {
-    // The Toon City Pack materials come in on URP's *2D* Mesh-Lit shader
-    // ("Universal Render Pipeline/2D/Mesh2D-Lit-Default"), which is wrong for 3D
-    // meshes — textured parts look flat and flat-colour parts (windows) don't
-    // render. This reassigns them to the proper 3D "Universal Render Pipeline/Lit"
-    // shader and remaps _MainTex/_Color -> _BaseMap/_BaseColor so nothing is lost.
+    // Some imported materials end up on a shader URP can't render, so they show
+    // up flat MAGENTA ("unrendered"): the URP *2D* Mesh-Lit shader (wrong for 3D
+    // meshes), a Built-in Standard/Legacy/Mobile shader, or a *missing* shader.
+    // This reassigns every such material to the proper 3D "Universal Render
+    // Pipeline/Lit" shader and remaps _MainTex/_Color -> _BaseMap/_BaseColor so
+    // nothing is lost. Materials already on a URP shader are left untouched.
     public static class MarlMaterialFixer
     {
-        [MenuItem("MARL Economy/Fix Toon City Materials (2D → URP Lit)")]
+        [MenuItem("MARL Economy/Fix Magenta Materials (→ URP Lit)")]
         public static void FixMaterials()
         {
             Shader lit = Shader.Find("Universal Render Pipeline/Lit");
@@ -25,10 +26,13 @@ namespace MarlEconomy.UnityViz.EditorTools
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 var mat = AssetDatabase.LoadAssetAtPath<Material>(path);
-                if (mat == null || mat.shader == null) continue;
+                if (mat == null) continue;
 
-                // Only touch the mis-assigned URP 2D materials.
-                if (!mat.shader.name.Contains("/2D/")) { skipped++; continue; }
+                // Leave materials that already use any URP shader; convert the rest
+                // (URP 2D, Built-in Standard/Legacy/Mobile, or a null/missing shader).
+                bool isUrp = mat.shader != null &&
+                             mat.shader.name.StartsWith("Universal Render Pipeline");
+                if (isUrp) { skipped++; continue; }
 
                 // Capture albedo texture (+ tiling/offset), base colour, emission
                 // BEFORE swapping the shader.
@@ -72,7 +76,7 @@ namespace MarlEconomy.UnityViz.EditorTools
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log($"[MARL] Reassigned {changed} material(s) from URP 2D to URP/Lit ({skipped} already fine).");
+            Debug.Log($"[MARL] Reassigned {changed} non-URP material(s) to URP/Lit ({skipped} already URP).");
         }
 
         // The toon window panes are modeled COPLANAR with the walls and were

@@ -218,6 +218,8 @@ namespace MarlEconomy.UnityViz
                 Vector3 p = site + new Vector3(Random.Range(-3f, 3f), 0f, Random.Range(-3f, 3f));
                 GameObject rock = MarlEconomyPrefabConfig.Pick(config != null ? config.propPrefabs : null, i);
                 GameObject g = rock != null ? Instantiate(rock) : GameObject.CreatePrimitive(PrimitiveType.Cube);
+                if (rock == null) // primitive fallback is magenta in URP until painted
+                    MarlVisualPalette.SetColor(g.GetComponent<Renderer>(), new Color(0.50f, 0.45f, 0.40f));
                 g.transform.SetParent(parent, true);
                 g.transform.position = p;
                 g.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);

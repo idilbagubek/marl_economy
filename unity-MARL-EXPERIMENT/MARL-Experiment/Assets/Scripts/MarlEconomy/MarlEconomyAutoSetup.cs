@@ -77,6 +77,9 @@ namespace MarlEconomy.UnityViz
             ctrl.transform.SetParent(canvas.transform, false);
             ctrl.playback = playback; ctrl.weekLabel = weekText;
 
+            var speed = new GameObject("Speed Slider").AddComponent<MarlSpeedSlider>();
+            speed.Init(canvas, playback, font);
+
             var fx = new GameObject("MarlEconomyFX").AddComponent<MarlEconomyFX>();
             if (config != null && config.particleMaterial != null) fx.particleMaterial = config.particleMaterial;
 
@@ -99,7 +102,7 @@ namespace MarlEconomy.UnityViz
                 new Vector2(0f, 22f), new Color(0.02f, 0.02f, 0.04f, 0.55f));
             bar.anchoredPosition = new Vector2(0f, 60f);
             Label(bar.transform, font, 11, new Color(0.7f, 0.7f, 0.8f, 0.9f), TextAnchor.MiddleCenter,
-                "WASD/Arrows move · Right-drag look · Q/E down/up · Shift fast · Space pause · ,/. speed · click timeline to jump");
+                "WASD/Arrows move · Right-drag look · Q/E down/up · Shift fast · Space pause · ,/. or drag Speed slider · click timeline to jump");
         }
 
         // ── scene scaffolding ────────────────────────────────────────────────

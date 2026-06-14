@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace MarlEconomy.UnityViz
@@ -66,6 +67,50 @@ namespace MarlEconomy.UnityViz
                 if (_beaconMat.HasProperty("_BaseColor")) _beaconMat.SetColor("_BaseColor", c);
                 _beaconMat.color = c;
             }
+        }
+
+        // A firm that left the snapshots has closed. Make the despawn legible:
+        // raise a BANKRUPT sign, then sink + flatten the building into the lot
+        // before destroying it (instead of blinking out of existence).
+        public void Collapse()
+        {
+            if (_beacon != null) _beacon.gameObject.SetActive(false);
+            StartCoroutine(CollapseRoutine());
+        }
+
+        private IEnumerator CollapseRoutine()
+        {
+            var sign = new GameObject("BANKRUPT");
+            sign.transform.SetParent(transform, false);
+            sign.transform.localPosition = new Vector3(0f, Mathf.Max(2.5f, _rawHeight * 0.6f), 0f);
+            var tm = sign.AddComponent<TextMesh>();
+            tm.text = "BANKRUPT";
+            tm.anchor = TextAnchor.MiddleCenter;
+            tm.alignment = TextAlignment.Center;
+            tm.characterSize = 0.2f;
+            tm.fontSize = 56;
+            tm.color = new Color(0.96f, 0.32f, 0.15f);
+            sign.AddComponent<MarlBillboard>();
+
+            Vector3 s0 = _model != null ? _model.localScale : Vector3.one;
+            Vector3 basePos = transform.position;
+            const float dur = 1.3f;
+            float t = 0f;
+            while (t < dur)
+            {
+                t += Time.deltaTime;
+                float k = Mathf.Clamp01(t / dur);
+                if (_model != null)
+                    _model.localScale = new Vector3(
+                        Mathf.Lerp(s0.x, s0.x * 0.85f, k),
+                        Mathf.Lerp(s0.y, s0.y * 0.04f, k * k), // flatten downward
+                        Mathf.Lerp(s0.z, s0.z * 0.85f, k));
+                transform.position = basePos + Vector3.down * (k * 1.6f); // sink into the lot
+                sign.transform.localPosition += Vector3.up * (Time.deltaTime * 0.7f);
+                tm.color = new Color(0.96f, 0.32f, 0.15f, 1f - k); // rise + fade the sign
+                yield return null;
+            }
+            Destroy(gameObject);
         }
     }
 }
