@@ -305,6 +305,7 @@ namespace MarlEconomy.UnityViz
 
             GameObject prefab = config != null ? MarlEconomyPrefabConfig.Pick(config.firmPrefabs, id) : null;
             GameObject model = prefab != null ? Instantiate(prefab) : CreateFirmFallback();
+            MarlUrpMaterials.Fix(model);          // imported packs ship Built-in/Standard mats → URP
             MarlWindowGlass.RestyleUnder(model);
             fv.Init(model, config != null ? config.firmScale : 1f);
 
@@ -319,6 +320,7 @@ namespace MarlEconomy.UnityViz
 
             GameObject prefab = config != null ? MarlEconomyPrefabConfig.Pick(config.householdPrefabs, id) : null;
             GameObject go = prefab != null ? Instantiate(prefab) : CreateHouseholdFallback(id);
+            MarlUrpMaterials.Fix(go);             // no-op for CityPeople (already URP), safe guard
             go.name = $"Household_{id}";
             go.transform.SetParent(agentsRoot, false);
             agent = go.AddComponent<MarlHouseholdAgent>();

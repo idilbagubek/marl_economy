@@ -4,8 +4,8 @@ using UnityEngine;
 namespace MarlEconomy.UnityViz
 {
     // Drives one firm building: the model is first normalized so its ground
-    // footprint fits a business-district lot (Toon City prefabs range from a
-    // tiny coffee shop to a huge shopping center), then capacity modulates the
+    // footprint fits a business-district lot (imported prefabs range from a
+    // tiny coffee shop to a tall skyscraper), then capacity modulates the
     // size within the lot. A colour beacon (red->amber->green) tracks cash
     // without recolouring the building art.
     public class MarlFirmVisual : MonoBehaviour

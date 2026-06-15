@@ -114,6 +114,7 @@ namespace MarlEconomy.UnityViz
             MarlEconomyPrefabConfig config, float footprint)
         {
             GameObject obj = prefab != null ? Object.Instantiate(prefab) : Fallback(color);
+            MarlUrpMaterials.Fix(obj);            // imported building mats → URP (no magenta)
             obj.name = label;
             obj.transform.SetParent(root, false);
             obj.transform.position = pos;
@@ -127,10 +128,11 @@ namespace MarlEconomy.UnityViz
         }
 
         // Households rest at a single landmark, so it should read as a prominent
-        // APARTMENT, not a little house/school. Pick the tallest apartment among the
-        // configured home prefabs (cb-apartment-*). Chosen in code on purpose: the
-        // restPrefab field in the .asset doesn't reliably stick when edited outside
-        // Unity, whereas homePrefabs already references the apartments we want.
+        // APARTMENT, not a little house. Pick the tallest apartment block among the
+        // configured home prefabs (SimplePoly "Residential_*", or "apartment" packs).
+        // Chosen in code on purpose: the restPrefab field in the .asset doesn't
+        // reliably stick when edited outside Unity, whereas homePrefabs already
+        // references the apartment blocks we want.
         private static GameObject PickRestApartment(MarlEconomyPrefabConfig config)
         {
             if (config == null || config.homePrefabs == null || config.homePrefabs.Count == 0)
@@ -141,7 +143,8 @@ namespace MarlEconomy.UnityViz
             foreach (var p in config.homePrefabs)
             {
                 if (p == null) continue;
-                bool isApartment = p.name.ToLowerInvariant().Contains("apartment");
+                string n = p.name.ToLowerInvariant();
+                bool isApartment = n.Contains("apartment") || n.Contains("residential");
                 // Apartments win outright; ties (and the no-apartment case) break by height.
                 float score = (isApartment ? 1000f : 0f) + MarlCityLots.MeasureHeight(p);
                 if (score > bestScore) { bestScore = score; best = p; }
@@ -186,6 +189,7 @@ namespace MarlEconomy.UnityViz
                     var prefab = MarlEconomyPrefabConfig.Pick(config.homePrefabs, i++);
                     if (prefab == null) continue;
                     var h = Object.Instantiate(prefab);
+                    MarlUrpMaterials.Fix(h);
                     h.name = "Home";
                     h.transform.SetParent(root, false);
                     h.transform.position = new Vector3(x, 0f, z);
@@ -207,6 +211,7 @@ namespace MarlEconomy.UnityViz
                     var prefab = MarlEconomyPrefabConfig.Pick(config.treePrefabs, i++);
                     if (prefab == null) continue;
                     var t = Object.Instantiate(prefab);
+                    MarlUrpMaterials.Fix(t);
                     t.transform.SetParent(root, false);
                     t.transform.position = new Vector3(x + Random.Range(-1f, 1f), 0f, z + Random.Range(-1f, 1f));
                     t.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);

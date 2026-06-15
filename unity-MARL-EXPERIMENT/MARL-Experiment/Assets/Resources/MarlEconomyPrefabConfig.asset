@@ -24,46 +24,58 @@ MonoBehaviour:
   - {fileID: 4552685038025500937, guid: 2a3e1e176c8dcfd4db59e20030b74013, type: 3}
   householdScale: 1
   firmPrefabs:
-  - {fileID: 8669286879879335331, guid: bf1f5bdc441574cccb97bc77d94cccac, type: 3}
-  - {fileID: 4770770195246864268, guid: 31ec228187ddd4313a8c9b564df8200a, type: 3}
-  - {fileID: 7373710074636534185, guid: 447bc9ea0a8ce4ae2b32e5bd0ada19aa, type: 3}
-  - {fileID: 966243167785352544, guid: ae820dc655ea1441f9d147da791ae4ff, type: 3}
-  - {fileID: 471507599072125308, guid: 08d82fdbc6e4c4edf856d7490d6a66f6, type: 3}
-  - {fileID: 1700152209450413462, guid: 5426e7f86b5b74ec0a38dd992399a5b0, type: 3}
-  - {fileID: 3046468159269691993, guid: ebbdd35fb5dc6423d9d2886143119140, type: 3}
-  - {fileID: 219735680005010313, guid: f9e94c22f5e3143b4a0ac9d4bbb61cdc, type: 3}
-  - {fileID: 8789870613390250131, guid: db25966dea359426691f69d2fbe2ee14, type: 3}
-  - {fileID: 7784631138136188648, guid: 138c23dba62294bff8a77e5a17caeb3c, type: 3}
-  - {fileID: 2179065384006413618, guid: be889b7cdbf704d7583f89cecda9a2f3, type: 3}
+  - {fileID: 100000, guid: e1d9101af5d96d94ca99efe2de0bac21, type: 3}
+  - {fileID: 100000, guid: 1d53359c70324d14c989d7058b50ec6b, type: 3}
+  - {fileID: 100000, guid: 4dc7028a3a83758439585b7c7c98cb27, type: 3}
+  - {fileID: 100000, guid: bc532b78ce09f234ea01da2deecfe035, type: 3}
+  - {fileID: 100000, guid: 65abb0f1b521f834bae80ea4c9d93734, type: 3}
+  - {fileID: 100000, guid: 4c14ffc6a7f79e942885227ac141590c, type: 3}
+  - {fileID: 100000, guid: 0c7bcaa85c9494849bc7a0a18b7f3324, type: 3}
+  - {fileID: 100000, guid: 52f969fb493f02248ba2e0ab07d6d81f, type: 3}
+  - {fileID: 100000, guid: 9ccda285cd5f1ce4fa00133b50ba5cbc, type: 3}
+  - {fileID: 100000, guid: 1682119d19a954f4a8020f36112606ed, type: 3}
+  - {fileID: 100000, guid: 8b3eca4c34b9e1148a3c4d42a48dd5b8, type: 3}
+  - {fileID: 100000, guid: 121f662ea65e2cf40a50c66470757a9e, type: 3}
   firmScale: 1
   homePrefabs:
-  - {fileID: 7031072911745939369, guid: 10d98aad7ab824bc7835210e42e32f3d, type: 3}
-  - {fileID: 6258908420346666966, guid: 8be760067bfd64276b6a98998751e48c, type: 3}
-  - {fileID: 7568669553352357607, guid: 96d468962340d443989d3580d218cb93, type: 3}
-  - {fileID: 9185167484837085440, guid: 2738b587b9bcf431b89364c9b96631ac, type: 3}
-  - {fileID: 9095892138787466633, guid: 7e1e1e5641b7b430e9cff12b237d76cf, type: 3}
-  - {fileID: 2571504398995303138, guid: 0c7f1786f206a4f149506fbb91114ee7, type: 3}
-  - {fileID: 6719888361061052548, guid: f154d8e56ba3c48c18e04e119cc1c9cd, type: 3}
-  - {fileID: 7051800037286115493, guid: ceb1ff597bc644b29bb228f75a1e3e32, type: 3}
+  - {fileID: 100000, guid: 66131d8838f42f545a30ce8606ce5365, type: 3}
+  - {fileID: 100000, guid: 142c9543c08ae014bad9d177ad54a989, type: 3}
+  - {fileID: 100000, guid: 11c264ca1bac5d74d883c776435fa684, type: 3}
+  - {fileID: 100000, guid: 63243ce2fd6113e4384abc2d949cb799, type: 3}
+  - {fileID: 100000, guid: 1f284b42849610642bfb5d418a57840b, type: 3}
+  - {fileID: 100000, guid: 8c3b216cc2b6dc04496d15009bc913cd, type: 3}
+  - {fileID: 100000, guid: 921b4e33443ab5943afa3c4841e74cae, type: 3}
+  - {fileID: 100000, guid: 246bcb60ae5be3744a4ea86bab749f44, type: 3}
+  - {fileID: 100000, guid: 0064eb002f3790247969e12119bbf9d2, type: 3}
   homeScale: 1
-  governmentPrefab: {fileID: 8419978456268541334, guid: 9be891bde5b5b4420a9cda984a509ea3, type: 3}
-  centralBankPrefab: {fileID: 1183038173969327049, guid: 80b7f4a5711d54ec2962815e76b809f6, type: 3}
-  marketPrefab: {fileID: 5705969882829558684, guid: b7606478af2ba44b28e13ccd39a13373, type: 3}
-  clinicPrefab: {fileID: 1211449853080816403, guid: 160c23d4a1f4d4843a0b3a67fcfa4bbf, type: 3}
-  bankPrefab: {fileID: 471507599072125308, guid: 08d82fdbc6e4c4edf856d7490d6a66f6, type: 3}
-  restPrefab: {fileID: 2203143736200133788, guid: 95664cfa7fe4b431986fc1a75b422d03, type: 3}
-  riskZonePrefab: {fileID: 3441643379567585011, guid: e8734d8ffa67c4f548eb3ea6fc31ca31, type: 3}
+  governmentPrefab: {fileID: 100000, guid: 22106dc63dce41746ad234a91af2d657, type: 3}
+  centralBankPrefab: {fileID: 100000, guid: 694e1313d3f12e84aaf959ff6960ddaf, type: 3}
+  marketPrefab: {fileID: 100000, guid: c3e95e72d6dba334594c3c5c37fcf18a, type: 3}
+  clinicPrefab: {fileID: 100000, guid: 5dd9f8de2583df543859013bcdc56639, type: 3}
+  bankPrefab: {fileID: 100000, guid: 6a690a756dbd65141a09a3ad7fafacc4, type: 3}
+  restPrefab: {fileID: 100000, guid: 921b4e33443ab5943afa3c4841e74cae, type: 3}
+  riskZonePrefab: {fileID: 100000, guid: f6674c1362ba984468bc1e71a2323d66, type: 3}
   landmarkScale: 1
   treePrefabs:
-  - {fileID: 4126379289218943248, guid: f072356c04e59430aa7306ed5964c592, type: 3}
-  - {fileID: 2733267861507776817, guid: 42e9cad8fa0c145f6a5d249272c0b5a1, type: 3}
-  - {fileID: 7490571266767458987, guid: aed8158b77ec94363887700352383f0c, type: 3}
-  - {fileID: 128322510527707026, guid: 9efb2638cadf04a7d9f711b8a141df62, type: 3}
+  - {fileID: 100000, guid: b82e76f4092b7d24aaeecddf36fe8d3b, type: 3}
+  - {fileID: 100000, guid: 8b680e0f7699a254c84ed6737b7eb53d, type: 3}
+  - {fileID: 100000, guid: 2509cc5763ca17f4598bf61fd585a93e, type: 3}
+  - {fileID: 100000, guid: f75f232634166cc459a69e7fd7a30880, type: 3}
   propPrefabs:
-  - {fileID: 3347996736547578827, guid: df36c02f283dc46cab9d0d5cf1c1a98d, type: 3}
-  - {fileID: 2342077107311468651, guid: f23d48175c2bb49f59511f8a94332038, type: 3}
-  fireTruckPrefab: {fileID: 3257083264415493559, guid: 05a357c739fcd4330b9773407e8d9331, type: 3}
-  ambulancePrefab: {fileID: 6262635755001553110, guid: bfb45da033094461d83a9a6054ee4c55, type: 3}
-  policeCarPrefab: {fileID: 7437263717829056142, guid: 3251c781defe1407c8f424ea546826e9, type: 3}
+  - {fileID: 100000, guid: dac1a631b172e66469fb09e9987bcf57, type: 3}
+  - {fileID: 100000, guid: 9ec25066ec33fa84d9227e27c5f5a8a0, type: 3}
+  fireTruckPrefab: {fileID: 100000, guid: cffe1734bc43bcb47b6433ebca05c04c, type: 3}
+  ambulancePrefab: {fileID: 100000, guid: 9b25e71fd5b7ac6469539d930c6dc2e6, type: 3}
+  policeCarPrefab: {fileID: 100000, guid: 1af0a2c8773f85c40bdb120f32cd8a8a, type: 3}
+  fxFirmOpen: {fileID: 9157105887711914197, guid: c4f829cb7dd4b864caf8832ec5b1ee55, type: 3}
+  fxFirmClose: {fileID: 725748389856807714, guid: 4bda94453d2ca7444a0fff05b2d425f5, type: 3}
+  fxCrime: {fileID: 4021103657954561961, guid: 5c755f9bc5253ea418e919994537dcc7, type: 3}
+  fxDeath: {fileID: 5642766282230003982, guid: b5c8ca7ed10b61e499cce8ec3b6e2e4c, type: 3}
+  fxFire: {fileID: 6294508013172393196, guid: 043176b6a68be2b43b073aaaa4782c7d, type: 3}
+  fxFireBurst: {fileID: 8194992990867289339, guid: 99bc28c0d45f51c4fbac01080b73edc7, type: 3}
+  fxFlood: {fileID: 8205706795460263314, guid: 326e86d5729c54e479798cacab220bb2, type: 3}
+  fxEarthquake: {fileID: 3432958286849152088, guid: 87ee7299dd44ed747af24dbb91bcd33b, type: 3}
+  fxEpidemic: {fileID: 4425129568585013132, guid: bbeeb0ddc21369746aaaae5c5c1c09cf, type: 3}
+  fxSupplyShock: {fileID: 7177991128484655659, guid: 59a35ab9f68edff40b6e5332bed330f5, type: 3}
   particleMaterial: {fileID: 0}
   waterMaterial: {fileID: 0}

@@ -81,6 +81,7 @@ namespace MarlEconomy.UnityViz
             speed.Init(canvas, playback, font);
 
             var fx = new GameObject("MarlEconomyFX").AddComponent<MarlEconomyFX>();
+            fx.config = config; // gives FX access to the Cartoon-FX prefabs
             if (config != null && config.particleMaterial != null) fx.particleMaterial = config.particleMaterial;
 
             var banner = new GameObject("MarlEventBanner").AddComponent<MarlEventBanner>();

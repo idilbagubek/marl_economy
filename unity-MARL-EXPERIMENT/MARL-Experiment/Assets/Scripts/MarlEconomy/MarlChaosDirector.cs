@@ -31,7 +31,8 @@ namespace MarlEconomy.UnityViz
         private class Overlay
         {
             public GameObject root;
-            public ParticleSystem loop;
+            public ParticleSystem loop;   // procedural fallback loop
+            public GameObject loopGo;     // Cartoon-FX looping prefab instance
             public Transform water;
         }
 
@@ -96,9 +97,13 @@ namespace MarlEconomy.UnityViz
             switch (w.kind)
             {
                 case DisasterKind.Fire:
-                    ov.loop = fx != null ? fx.PlayLooping(site + Vector3.up * 1.5f, "Fire", a, b,
-                        60, 1.4f, 3.5f, 0.7f, 1.2f, 3.5f) : null;
+                    if (fx != null && config != null && config.fxFire != null)
+                        ov.loopGo = fx.SpawnLooping(config.fxFire, site + Vector3.up * 0.5f);
+                    else
+                        ov.loop = fx != null ? fx.PlayLooping(site + Vector3.up * 1.5f, "Fire", a, b,
+                            60, 1.4f, 3.5f, 0.7f, 1.2f, 3.5f) : null;
                     if (ov.loop != null) ov.loop.transform.SetParent(ov.root.transform, true);
+                    if (ov.loopGo != null) ov.loopGo.transform.SetParent(ov.root.transform, true);
                     SpawnVehicle(config != null ? config.fireTruckPrefab : null, site + new Vector3(3f, 0f, 0f), ov.root.transform);
                     break;
 
@@ -111,9 +116,13 @@ namespace MarlEconomy.UnityViz
                     break;
 
                 case DisasterKind.EpidemicWave:
-                    ov.loop = fx != null ? fx.PlayLooping(MarlEconomyPlayback.ClinicPos + Vector3.up * 1.2f, "Epidemic", a, b,
-                        40, 2.0f, 1.5f, 0.5f, 3.5f, 1.2f) : null;
+                    if (fx != null && config != null && config.fxEpidemic != null)
+                        ov.loopGo = fx.SpawnLooping(config.fxEpidemic, MarlEconomyPlayback.ClinicPos + Vector3.up * 0.5f);
+                    else
+                        ov.loop = fx != null ? fx.PlayLooping(MarlEconomyPlayback.ClinicPos + Vector3.up * 1.2f, "Epidemic", a, b,
+                            40, 2.0f, 1.5f, 0.5f, 3.5f, 1.2f) : null;
                     if (ov.loop != null) ov.loop.transform.SetParent(ov.root.transform, true);
+                    if (ov.loopGo != null) ov.loopGo.transform.SetParent(ov.root.transform, true);
                     SpawnVehicle(config != null ? config.ambulancePrefab : null, MarlEconomyPlayback.ClinicPos + new Vector3(3f, 0f, 0f), ov.root.transform);
                     break;
 
@@ -220,6 +229,8 @@ namespace MarlEconomy.UnityViz
                 GameObject g = rock != null ? Instantiate(rock) : GameObject.CreatePrimitive(PrimitiveType.Cube);
                 if (rock == null) // primitive fallback is magenta in URP until painted
                     MarlVisualPalette.SetColor(g.GetComponent<Renderer>(), new Color(0.50f, 0.45f, 0.40f));
+                else
+                    MarlUrpMaterials.Fix(g); // imported rock mats → URP
                 g.transform.SetParent(parent, true);
                 g.transform.position = p;
                 g.transform.rotation = Quaternion.Euler(0f, Random.Range(0f, 360f), 0f);
@@ -231,6 +242,7 @@ namespace MarlEconomy.UnityViz
         {
             if (prefab == null) return;
             var v = Instantiate(prefab);
+            MarlUrpMaterials.Fix(v); // imported vehicle mats → URP
             MarlWindowGlass.RestyleUnder(v);
             v.transform.SetParent(parent, true);
             v.transform.position = pos;
@@ -269,6 +281,7 @@ namespace MarlEconomy.UnityViz
         {
             if (ov == null) return;
             if (ov.loop != null) { ov.loop.Stop(); Destroy(ov.loop.gameObject, 2f); }
+            if (ov.loopGo != null) Destroy(ov.loopGo); // also a child of root, belt-and-suspenders
             if (ov.root != null) Destroy(ov.root);
         }
     }

@@ -41,6 +41,18 @@ namespace MarlEconomy.UnityViz
         public GameObject ambulancePrefab;
         public GameObject policeCarPrefab;
 
+        [Header("Event VFX (Cartoon FX Remaster) — optional; procedural fallback if null")]
+        public GameObject fxFirmOpen;     // firm spawns (one-shot)
+        public GameObject fxFirmClose;    // firm collapses (one-shot)
+        public GameObject fxCrime;        // theft / steal (one-shot)
+        public GameObject fxDeath;        // household death (one-shot)
+        public GameObject fxFire;         // persistent burning (forced loop)
+        public GameObject fxFireBurst;    // fire-disaster onset (one-shot)
+        public GameObject fxFlood;        // flood splash (one-shot)
+        public GameObject fxEarthquake;   // quake ground hit (one-shot)
+        public GameObject fxEpidemic;     // epidemic poison cloud (loop + onset)
+        public GameObject fxSupplyShock;  // supply-shock flash (one-shot)
+
         [Header("Materials")]
         public Material particleMaterial;    // URP/Particles/Unlit recommended
         public Material waterMaterial;       // translucent blue for floods

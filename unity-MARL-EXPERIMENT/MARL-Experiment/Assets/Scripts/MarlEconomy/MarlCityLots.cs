@@ -6,7 +6,7 @@ namespace MarlEconomy.UnityViz
     // dynamic firms spawn/despawn without ever touching the static city. Lot i
     // fills column-by-column (6 rows per column); columns face each other across
     // a central avenue at x = 31. Also hosts the footprint-fitting helpers that
-    // keep the wildly differently sized Toon City prefabs inside their plots.
+    // keep the wildly differently sized imported building prefabs inside their plots.
     public static class MarlCityLots
     {
         public const int RowsPerColumn = 6;
